@@ -12,11 +12,19 @@ int main(int argc, char* argv[])
     ros::Publisher chatter_pub = nh.advertise<std_msgs::Int32MultiArray>("eposmsg", 1000);
     int count = 0;
     std_msgs::Int32MultiArray msg;
+    std_msgs::MultiArrayDimension msg_dim;
     msg.data.push_back(0);
     msg.data.push_back(0);
     msg.data.push_back(0);
-    msg.layout.dim.reserve(1);
-    msg.layout.dim[0].label = "Propulsion ENABLE";
+    msg.data.push_back(0);
+    msg_dim.label = "Propulsion ENABLE";
+    msg.layout.dim.push_back(msg_dim);
+    msg_dim.label = "Propulsion DIRECTION";
+    msg.layout.dim.push_back(msg_dim);
+    msg_dim.label = "Propulsion PWM";
+    msg.layout.dim.push_back(msg_dim);
+    msg_dim.label = "Steering ANGLE";
+    msg.layout.dim.push_back(msg_dim);
 
 
     while (ros::ok())
@@ -28,7 +36,8 @@ int main(int argc, char* argv[])
         {
             msg.data[0] = 1;
             msg.data[1] = 0;
-            msg.data[2] = 1500;
+            msg.data[2] = 20;
+            msg.data[3] = 1500;
         }
         else if (count >= 10 && count < 15 )
         {
@@ -38,11 +47,15 @@ int main(int argc, char* argv[])
         {
             msg.data[0] = 1;
             msg.data[1] = 1;
-            msg.data[2] = -1500;
+            msg.data[2] = 40;
+            msg.data[3] = -1500;
         }
         else if (count >= 25 && count < 35 )
         {
             msg.data[0] = 0;
+            msg.data[1] = 0;
+            msg.data[2] = 10;
+            msg.data[3] = 0;
         }
         else
         {
